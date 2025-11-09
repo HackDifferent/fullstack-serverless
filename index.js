@@ -570,7 +570,8 @@ class ServerlessFullstackPlugin {
     getCLIOptions(param) {
       // v3
       const isv3 = this.serverless.version.split('.')[0] === '3';
-      if (isv3) {
+      const isv4 = this.serverless.version.split('.')[0] === '4';
+      if (isv3 || isv4) {
         const cliOptionsParams = Array.isArray(this.cliOptions?.param) ? [...this.cliOptions.param] : [];
         const cliOptions = {...this.cliOptions}
 
