@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- The confirmation prompt no longer crashes on current Node (`ERR_USE_AFTER_CLOSE` once answered).
+- `--param="no-confirm"` now skips the prompt on Serverless v3/v4; it was read from the raw CLI options and ignored.
+
+### Security
+- Replace `prompt-confirm` with a built-in `readline` prompt, removing the `toggle-array` prototype-pollution advisory (GHSA-34q3-8x9v-j957, no fixed release) and 110 transitive packages. Answers are unchanged (Enter or y/yes/true proceed); input that ends without an answer now declines, and Ctrl-C aborts the run.
+
 
 ## [0.8.0] - 2021-1-28
 Thanks @pecirep, @miguel-a-calles-mba, @superandrew213

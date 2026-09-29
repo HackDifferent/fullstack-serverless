@@ -6,12 +6,12 @@ const fs = require('fs');
 const {spawn} = require('child_process');
 
 const BbPromise = require('bluebird');
-const Confirm = require('prompt-confirm');
 
 const bucketUtils = require('./lib/bucketUtils');
 const uploadDirectory = require('./lib/upload');
 const validateClient = require('./lib/validate');
 const invalidateCloudfrontDistribution = require('./lib/cloudFront');
+const confirm = require('./lib/confirm');
 
 class ServerlessFullstackPlugin {
     constructor(serverless, cliOptions) {
@@ -67,7 +67,7 @@ class ServerlessFullstackPlugin {
         return this.validateConfig()
             .then(() => {
                 bucketName = this.getBucketName(this.options.bucketName);
-                return (this.cliOptions.confirm === false || this.options.noConfirm === true) ? true : new Confirm(`Are you sure you want to delete bucket '${bucketName}'?`).run();
+                return (this.getCLIOptions('confirm') === false || this.options.noConfirm === true) ? true : confirm(`Are you sure you want to delete bucket '${bucketName}'?`);
             })
             .then(goOn => {
                 if (goOn) {
@@ -197,7 +197,7 @@ class ServerlessFullstackPlugin {
                     );
 
                     deployDescribe.forEach(m => this.serverless.cli.log(m));
-                    return (this.cliOptions.confirm === false || this.options.noConfirm === true) ? true : new Confirm(`Do you want to proceed?`).run();
+                    return (this.getCLIOptions('confirm') === false || this.options.noConfirm === true) ? true : confirm(`Do you want to proceed?`);
                 })
                 .then(goOn => {
                     if (goOn) {

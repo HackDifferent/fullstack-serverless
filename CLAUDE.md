@@ -25,7 +25,7 @@ Everything is wired through the `ServerlessFullstackPlugin` class in `index.js`,
 
 **Client deploy (after stack update, or `serverless client deploy`):**
 - `generateClient` spawns `clientCommand` in `clientSrcPath`, with `provider.environment` merged into `process.env`.
-- `processDeployment` validates config (`lib/validate.js`, which throws an *array* of error strings), asks for confirmation (`prompt-confirm`), empties the bucket (`lib/bucketUtils.js`), and uploads `distributionFolder` (`lib/upload.js`, which applies `objectHeaders` specs in this order: `ALL_OBJECTS`, then folder, then file). It then invalidates CloudFront (`lib/cloudFront.js`, which looks up the distribution through the stack's `ApiDistribution` logical ID and polls until the invalidation completes).
+- `processDeployment` validates config (`lib/validate.js`, which throws an *array* of error strings), asks for confirmation (`lib/confirm.js`, plain `readline`; Enter means yes), empties the bucket (`lib/bucketUtils.js`), and uploads `distributionFolder` (`lib/upload.js`, which applies `objectHeaders` specs in this order: `ALL_OBJECTS`, then folder, then file). It then invalidates CloudFront (`lib/cloudFront.js`, which looks up the distribution through the stack's `ApiDistribution` logical ID and polls until the invalidation completes).
 - `serverless remove` triggers `client remove` first, which empties the bucket so CloudFormation can delete it.
 
 ## Conventions and gotchas
